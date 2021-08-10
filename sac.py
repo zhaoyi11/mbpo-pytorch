@@ -55,7 +55,6 @@ class Actor(nn.Module):
         else:
             return pi_action
 
-
 class Critic(nn.Module):
     def __init__(self, obs_dim, act_dim, hidden_dim=256):
         super().__init__()
@@ -113,7 +112,7 @@ class SAC(object):
         for target_param, param in zip(self.target_critic.parameters(), self.critic.parameters()):
             target_param.data.copy_(param.data)
 
-        self.target_entropy = -action_dim if target_entropy is None else target_entropy 
+        self.target_entropy = -action_dim / 2. if target_entropy is None else target_entropy 
 
         # log_temp, the temperature term for the policy entropy
         self.log_temp = torch.zeros(1, requires_grad=True, device=device)
@@ -226,9 +225,9 @@ if __name__ == "__main__":
     parser.add_argument("--env", default="HalfCheetah-v2")
     parser.add_argument("--seed", default=1, type=int)
     parser.add_argument("--n_random_timesteps", default=10_000, type=int)
-    parser.add_argument("--max_timesteps", default=200_000, type=int)
+    parser.add_argument("--max_timesteps", default=1000_000, type=int)
     parser.add_argument("--batch_size", default=256, type=int)
-    parser.add_argument("--eval_freq", default=1000, type=int)
+    parser.add_argument("--eval_freq", default=5000, type=int)
     args = parser.parse_args()
 
     wandb.init(project="mbpo-pytorch")

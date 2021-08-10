@@ -110,7 +110,7 @@ class Transition(object):
                 hidden_dims:Sequence[int]=(200, 200, 200, 200),
                 num_ensembles:int=7,
                 num_elites:int=5,
-                lr:float=1e-3,
+                lr:float=3e-4,
                 batch_size:int=256,
                 max_logging:int=5000,
                 early_stop_patience:int=5,

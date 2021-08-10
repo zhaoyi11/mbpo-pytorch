@@ -16,7 +16,7 @@ def get_config(task):
             "max_timesteps": 125_000,
             "n_train_repeat": 20,
             "rollout_horizon_schedule": Schedule(1, 15, 20_000, 100_00),
-            "traget_entropy":-1,
+            "target_entropy":-1,
         }
     elif env_name == "walker2d":
         task_config = {

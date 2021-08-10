@@ -53,7 +53,7 @@ if __name__ == "__main__":
     wandb.config.update(args)
 
     file_name = f"{args.policy}_{args.env}_{args.seed}"
-    args.seed = random.randint(0, 1000)
+    # args.seed = random.randint(0, 1000) # enable this if you want to use random seed
     print("---------------------------------------")
     print(f"Policy: {args.policy}, Env: {args.env}, Seed: {args.seed}")
     print("---------------------------------------")
