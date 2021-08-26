@@ -113,7 +113,7 @@ class Transition(object):
                 lr:float=3e-4,
                 batch_size:int=256,
                 max_logging:int=5000,
-                early_stop_patience:int=5,
+                early_stop_patience:int=10,
                 ):
         super().__init__()
 
@@ -262,14 +262,16 @@ class Transition(object):
             return next_observations, rewards, terminals, {}
 
     def save(self, filename):
-        torch.save(self.transition.state_dict(), filename + "_transition")
-        torch.save(self.transition_optim.state_dict(), filename + "_transition_optimizer")
-        torch.save(self.scaler, filename+"_scaler.pth")
+        torch.save({'transition': self.transition.state_dict(),
+            'transition_optimizer': self.transition_optim.state_dict(),
+            'scaler': self.scaler}, filename+'_transition.pth')
 
-    def load(self, filename):   
-        self.transition.load_state_dict(torch.load(filename + "_transition"))
-        self.transition_optim.load_state_dict(torch.load(filename + "_transition_optimizer"))
-        self.scaler = torch.load(filename + "_scaler.pth")
+    def load(self, filename): 
+        transition_dicts = torch.load(filename + '_transition.pth')
+
+        self.transition.load_state_dict(transition_dicts['transition'])
+        self.transition_optim.load_state_dict(transition_dicts['transition_optimizer'])
+        self.scaler = transition_dicts['scaler']
 
     def _evaluate(self, inputs: torch.Tensor, targets: torch.Tensor)-> np.ndarray:
         with torch.no_grad():

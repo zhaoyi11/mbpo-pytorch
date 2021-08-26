@@ -193,24 +193,25 @@ class SAC(object):
                 }
 
     def save(self, filename):
-        torch.save(self.critic.state_dict(), filename + "_critic")
-        torch.save(self.critic_optimizer.state_dict(), filename + "_critic_optimizer")
-
-        torch.save(self.actor.state_dict(), filename + "_actor")
-        torch.save(self.actor_optimizer.state_dict(), filename + "_actor_optimizer")
-
-        torch.save(self.log_temp, filename+"_log_temp.pth")
+        torch.save({'critic': self.critic.state_dict(),
+            'critic_optimizer': self.critic_optimizer.state_dict(),
+            'actor': self.actor.state_dict(),
+            'actor_optimizer': self.actor_optimizer.state_dict(),
+            'log_temp': self.log_temp, 
+            'log_temp_optimizer': self.log_temp_optimizer}, filename + "_policy.pth")
 
     def load(self, filename):
-        self.critic.load_state_dict(torch.load(filename + "_critic"))
-        self.critic_optimizer.load_state_dict(torch.load(filename + "_critic_optimizer"))
-        self.critic_target = copy.deepcopy(self.critic)
+        policy_dicts = torch.load(filename + "_policy.pth")
+        
+        self.critic.load_state_dict(policy_dicts['critic'])
+        self.critic_optimizer.load_state_dict(policy_dicts['critic_optimizer'])
+        self.target_critic = copy.deepcopy(self.critic)
 
-        self.actor.load_state_dict(torch.load(filename + "_actor"))
-        self.actor_optimizer.load_state_dict(torch.load(filename + "_actor_optimizer"))
-        self.actor_target = copy.deepcopy(self.actor)
+        self.actor.load_state_dict(policy_dicts['actor'])
+        self.actor_optimizer.load_state_dict(policy_dicts['actor_optimizer'])
 
-        self.log_temp = torch.load(filename + "_log_temp.pth")
+        self.log_temp = policy_dicts['log_temp']
+        self.log_temp_optimizer.load_state_dict(policy_dicts['log_temp_optimizer'])
 
 
 if __name__ == "__main__":
