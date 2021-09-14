@@ -198,7 +198,7 @@ class SAC(object):
             'actor': self.actor.state_dict(),
             'actor_optimizer': self.actor_optimizer.state_dict(),
             'log_temp': self.log_temp, 
-            'log_temp_optimizer': self.log_temp_optimizer}, filename + "_policy.pth")
+            'log_temp_optimizer': self.log_temp_optimizer.state_dict(),}, filename + "_policy.pth")
 
     def load(self, filename):
         policy_dicts = torch.load(filename + "_policy.pth")
